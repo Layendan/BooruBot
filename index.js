@@ -16,7 +16,7 @@ booru.posts({ tags: 'rating:safe order:rank' }).then(posts => {
 
     // Download post image using node's https and fs libraries
     require('https').get(url, response => {
-        response.pipe(require('fs').createWriteStream(name))
+
         console.log(url)
         console.log(url.href)
     })
