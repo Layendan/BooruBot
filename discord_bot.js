@@ -8,10 +8,112 @@ const login = ''
 const key = ''
 const prefix = 'b!'
 
+//slash-command listener
+bot.ws.on("INTERACTION_CREATE", async (interaction) => {
+    const interact = (data) =>
+        bot.api.interactions(interaction.id, interaction.token).callback.post({
+            data,
+        });
+
+    try {
+        switch (interaction.data.name) {
+            case "hentai":
+                if (!interaction.data.options) {
+
+                    // Perform a search for popular image posts
+                    const booru = new Danbooru()
+                    booru.posts({ tags: 'genshin_impact rating:explicit ', limit: 30 }).then(posts => {
+                        // Select a random post from posts array
+                        const index = Math.floor(Math.random() * posts.length)
+                        console.log(posts.length)
+
+                        console.log(index)
+
+                        const post = posts[index]
 
 
+                        // Get post's url
+                        const url = booru.url(post.file_url)
+
+                        const name = post.id
+
+                        interact({
+                            type: 4,
+                            data: {
+                                content: "",
+                                embeds: [
+                                    {
+                                        title: name,
+                                        url: "https://danbooru.donmai.us/posts/" + name,
+                                        color: Discord.Constants.Colors.BLURPLE,
+                                        image: {
+                                            url: url.href,
+                                        },
+                                    },
+                                ],
+                            },
+                        });
+
+                    });
+                } else {
+                    // Perform a search for popular image posts
+                    const booru = new Danbooru()
 
 
+                    const post = await booru.posts(interaction.data.options.find(
+                        (option) => option.name == "id"
+                    ) &&
+                        interaction.data.options.find(
+                            (option) => option.name == "id"
+                        ).value);
+
+
+                    // Get post's url
+                    const url = booru.url(post.file_url)
+
+                    const name = post.id
+
+                    interact({
+                        type: 4,
+                        data: {
+                            content: "",
+                            embeds: [
+                                {
+                                    title: name,
+                                    url: "https://danbooru.donmai.us/posts/" + name,
+                                    color: Discord.Constants.Colors.BLURPLE,
+                                    image: {
+                                        url: url.href,
+                                    },
+                                },
+                            ],
+                        },
+                    });
+                }
+                break;
+        }
+
+    } catch (error) {
+
+        interact({
+            type: 4,
+            data: {
+                content: "",
+                embeds: [
+                    {
+                        title: "An error has occured!",
+                        description:
+                            "We're so sorry for the inconvenience!\n\nThe error has been automatically logged, so we'll start working on fixing this as soon as we see the message.\n\n" + error,
+                        thumbnail: {
+                            url: "https://i.imgur.com/J4jZEVD.png",
+                        },
+                        color: Discord.Constants.Colors.RED,
+                    },
+                ],
+            },
+        });
+    }
+});
 
 //notes
 /*bot will listen to whatever channel it has access to. Will send private message with the current code*/
