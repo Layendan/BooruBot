@@ -12,6 +12,7 @@ coverage
 docs
 
 .idea
+.env
 
 # mac stuff
 .DS_Store
