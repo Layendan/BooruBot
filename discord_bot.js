@@ -9,7 +9,7 @@ const key = ''
 const prefix = 'b!'
 
 //slash-command listener
-bot.ws.on("INTERACTION_CREATE", async (interaction) => {
+bot.ws.on("INTERACTION_CREATE", async(interaction) => {
     const interact = (data) =>
         bot.api.interactions(interaction.id, interaction.token).callback.post({
             data,
@@ -41,16 +41,14 @@ bot.ws.on("INTERACTION_CREATE", async (interaction) => {
                             type: 4,
                             data: {
                                 content: "",
-                                embeds: [
-                                    {
-                                        title: name,
-                                        url: "https://danbooru.donmai.us/posts/" + name,
-                                        color: Discord.Constants.Colors.BLURPLE,
-                                        image: {
-                                            url: url.href,
-                                        },
+                                embeds: [{
+                                    title: name,
+                                    url: "https://danbooru.donmai.us/posts/" + name,
+                                    color: Discord.Constants.Colors.BLURPLE,
+                                    image: {
+                                        url: url.href,
                                     },
-                                ],
+                                }, ],
                             },
                         });
 
@@ -61,8 +59,8 @@ bot.ws.on("INTERACTION_CREATE", async (interaction) => {
 
 
                     const post = await booru.posts(interaction.data.options.find(
-                        (option) => option.name == "id"
-                    ) &&
+                            (option) => option.name == "id"
+                        ) &&
                         interaction.data.options.find(
                             (option) => option.name == "id"
                         ).value);
@@ -77,16 +75,14 @@ bot.ws.on("INTERACTION_CREATE", async (interaction) => {
                         type: 4,
                         data: {
                             content: "",
-                            embeds: [
-                                {
-                                    title: name,
-                                    url: "https://danbooru.donmai.us/posts/" + name,
-                                    color: Discord.Constants.Colors.BLURPLE,
-                                    image: {
-                                        url: url.href,
-                                    },
+                            embeds: [{
+                                title: name,
+                                url: "https://danbooru.donmai.us/posts/" + name,
+                                color: Discord.Constants.Colors.BLURPLE,
+                                image: {
+                                    url: url.href,
                                 },
-                            ],
+                            }, ],
                         },
                     });
                 }
@@ -99,17 +95,14 @@ bot.ws.on("INTERACTION_CREATE", async (interaction) => {
             type: 4,
             data: {
                 content: "",
-                embeds: [
-                    {
-                        title: "An error has occured!",
-                        description:
-                            "We're so sorry for the inconvenience!\n\nThe error has been automatically logged, so we'll start working on fixing this as soon as we see the message.\n\n" + error,
-                        thumbnail: {
-                            url: "https://i.imgur.com/J4jZEVD.png",
-                        },
-                        color: Discord.Constants.Colors.RED,
+                embeds: [{
+                    title: "An error has occured!",
+                    description: "We're so sorry for the inconvenience!\n\nThe error has been automatically logged, so we'll start working on fixing this as soon as we see the message.\n\n" + error,
+                    thumbnail: {
+                        url: "https://i.imgur.com/J4jZEVD.png",
                     },
-                ],
+                    color: Discord.Constants.Colors.RED,
+                }, ],
             },
         });
     }
@@ -119,63 +112,6 @@ bot.ws.on("INTERACTION_CREATE", async (interaction) => {
 /*bot will listen to whatever channel it has access to. Will send private message with the current code*/
 /*anything with quotes ' ' information goes inside them*/
 
-
-// Later on we make functions when we understand the wrapper????
-
-// const registerCommand = (data) => {
-//     bot.api
-//         .applications(process.env.CLIENT_ID || bot.user.id)
-//         .commands.post({ data });
-// };
-
-// registerCommand({
-//     name: "hentai",
-//     description: "Danbooru",
-//     options: [{
-//         name: "id",
-//         description: "The identifier of the post",
-//         type: 4,
-//         required: false,
-//     }, ],
-// });
-
-// bot.ws.on('INTERACTION_CREATE', async interaction => {
-//     const booru = new Danbooru()
-//     embed = ''
-//     image = ''
-//     await booru.posts({ tags: 'genshin_impact rating:explicit ' }).then(posts => { //Limit  does nothing?
-//         // Select a random post from posts array
-//         const index = Math.floor(Math.random() * posts.length)
-//         console.log(posts.length)
-
-//         console.log(index)
-
-//         const post = posts[index]
-
-
-//         // Get post's url
-//         const url = booru.url(post.file_url)
-
-//         const name = post.id
-
-//         embed = new Discord.MessageEmbed()
-//             .setColor('#00FFFF') //aqua
-//             .setTitle(name) //index
-//             .setURL('https://danbooru.donmai.us/posts/' + name) //links to page
-//             .setImage(url.href)
-
-//         image = url.href
-
-//     })
-//     bot.api.interactions(interaction.id, interaction.token).callback.post({
-//         data: {
-//             type: 3,
-//             data: {
-//                 content: image
-//             }
-//         }
-//     })
-// })
 //Checking if bot is logged in
 bot.on("ready", () => {
     console.log(`Logged in as ${bot.user.tag}!`)
