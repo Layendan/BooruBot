@@ -265,10 +265,10 @@ bot.on('message', async function(message) {
         console.log(message.member.user.tag)
         console.log("running second tag")
 
-        const posts = await booru.posts({ limit: 10, random: true, tags: 'hu_tao' }) //page needs to given first as a param and then tags according to the API
+        const posts = await booru.posts({ limit: 10, random: true, tags: 'genshin_impact rating:explicit' }) //page needs to given first as a param and then tags according to the API
 
         for (const post of posts) {
-            if (post.file_ext === 'mp4') {
+            if (post.file_ext === 'mp4' || typeof post.id === 'undefined') {
                 continue
             }
             const booru = new Danbooru()
@@ -320,20 +320,27 @@ bot.on('message', message => {
             // Select a random post from posts array
 
             const index = Math.floor(Math.random() * posts.length)
+
             console.log("Found " + posts.length + " posts")
 
-            if (posts.length === 0) { //If posts length is 0 that means the tags used to search are invalid
+            if (posts.length === 0 || typeof posts.length === 'undefined') { //If posts length is 0 that means the tags used to search are invalid
                 return message.channel.send(`No posts found, invalid tags used, ${message.author}.`)
 
             }
+
+
 
             console.log("Selected Post index is " + index)
 
             const post = posts[index]
 
 
+
+
+
             // Get post's url
             const url = booru.url(post.file_url)
+
 
             const name = post.id
 
