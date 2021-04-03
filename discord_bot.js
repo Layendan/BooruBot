@@ -74,6 +74,88 @@ const prefix = 'b!'
 //         }
 //     })
 // })
+//Checking if bot is logged in
+bot.on("ready", () => {
+    console.log(`Logged in as ${bot.user.tag}!`)
+})
+
+//Running the Tag code when user dms
+bot.on("message", message => {
+
+    if (message.guild == null && message.author.id !== '827591767590305833') {
+        console.log(`${message.author.tag} Direct messaged the bot `)
+        if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+
+        const args = message.content.slice(prefix.length).trim().split(/ +/);
+        const command = args.shift().toLowerCase();
+
+
+        if (command === 'tags') {
+            if (!args.length) {
+                return message.reply(`You didn't provide any arguments, ${message.author}!`);
+            }
+
+            if (args.length > 3) {
+                return message.reply(`You can only input 3 tags, ${message.author}`) //Currently unauthed users can only query 3 tags
+            }
+
+            tags = args.join(' ') //Joining the tags with a space to search with later 
+
+            if (tags.length > 500) {
+                console.log(`User ${message.author.tag} tried to enter more than 500 characters!`)
+                return message.reply(`Nice try fucker I fixed it, ${message.author}`)
+            }
+
+
+            message.channel.send(`Command name: ${command}\nArguments: ${args}`);
+            console.log(`User ${message.author.tag} invoked the ${command} command`)
+
+            // Perform a search for popular image posts
+
+            const booru = new Danbooru()
+
+
+            console.log(tags)
+            booru.posts({ tags: tags, limit: 100 }).then(posts => { //Limit  does nothing?
+                // Select a random post from posts array
+
+                const index = Math.floor(Math.random() * posts.length)
+                console.log("Found " + posts.length + " posts")
+
+                if (posts.length === 0) { //If posts length is 0 that means the tags used to search are invalid
+                    return message.reply(`No posts found, invalid tags used, ${message.author}.`)
+
+                }
+
+                console.log("Selected Post index is " + index)
+
+                const post = posts[index]
+
+
+                // Get post's url
+                const url = booru.url(post.file_url)
+
+                const name = post.id
+
+                const embed = new Discord.MessageEmbed()
+                    .setColor('#00FFFF') //aqua
+                    .setTitle(name) //index
+                    .setURL('https://danbooru.donmai.us/posts/' + name) //links to page
+                    .setImage(url.href)
+                    .setFooter(message.author.tag, message.author.avatarURL()) //member name + member image
+
+                message.reply(embed)
+
+            })
+
+        }
+
+
+
+    }
+});
+
 
 bot.on('message', async function(message) {
 
@@ -171,7 +253,7 @@ bot.on('message', async function(message) {
 
 
 bot.on('message', message => {
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
+    if (!message.content.startsWith(prefix) || message.author.bot || message.guild == null) return;
 
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
