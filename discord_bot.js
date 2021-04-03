@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
-const TOKEN = 'ODI3NTkxNzY3NTkwMzA1ODMz.YGdQ5Q.rum-diNA9L4_44B1uhOcELtjyuM' /*change 'Your Discord Token Here to the token of your bot*/ //Reminder to change this to env var
+const TOKEN = process.env.TOKEN || '' /*change 'Your Discord Token Here to the token of your bot*/ //Reminder to change this to env var
 const apiEndpoint = 'https://discord.com/api/v8/applications/827591767590305833/guilds/716516840146468925/commands'
 const Danbooru = require('danbooru')
 const login = ''
@@ -16,51 +16,30 @@ const key = ''
 
 //Later on we make functions when we understand the wrapper????
 
-const commandData = 
-{
-    // Name of the command that users will enter
-    "name": "hentai",
-    // Short description of the command
-    "description": "Danbooru",
-    // All of the options that users can select
-    "options": [
+const registerCommand = (data) => {
+    bot.api
+        .applications(process.env.CLIENT_ID || bot.user.id)
+        .commands.post({ data });
+};
+
+registerCommand({
+    name: "hentai",
+    description: "Danbooru",
+    options: [
         {
-            // Name of the subcommand
-            "name": "id",
-            // Short description of subcommand
-            "description": "The identifier of the post",
-            // Type of input from user: https://discord.com/developers/docs/interactions/slash-commands#applicationcommandoptiontype
-            "type": 4,
-            // Whether the subcommand is required
-            "required": false,
-            // If the subcommand is a string, you can specify choices that the user must select
-        }
-    ]
-}
-
-async function main() {
-    const fetch = require('node-fetch')
-
-    const response = await fetch(apiEndpoint, {
-        method: 'post',
-        body: JSON.stringify(commandData),
-        headers: {
-            'Authorization': 'Bot ' + TOKEN,
-            'Content-Type': 'application/json'
-        }
-    })
-    const json = await response.json()
-
-    console.log(json)
-}
-
-//main()
+            name: "id",
+            description: "The identifier of the post",
+            type: 4,
+            required: false,
+        },
+    ],
+});
 
 bot.ws.on('INTERACTION_CREATE', async interaction => {
     const booru = new Danbooru()
     embed = ''
     image = ''
-    booru.posts({ tags: 'genshin_impact rating:explicit ' }).then(posts => { //Limit  does nothing?
+    await booru.posts({ tags: 'genshin_impact rating:explicit ' }).then(posts => { //Limit  does nothing?
         // Select a random post from posts array
         const index = Math.floor(Math.random() * posts.length)
         console.log(posts.length)
@@ -80,7 +59,6 @@ bot.ws.on('INTERACTION_CREATE', async interaction => {
             .setTitle(name) //index
             .setURL('https://danbooru.donmai.us/posts/' + name) //links to page
             .setImage(url.href)
-            .setFooter(message.member.user.tag, message.member.user.avatarURL()) //member name + member image
 
         image = url.href
 
@@ -104,7 +82,7 @@ bot.on('message', async function(message) {
         // Perform a search for popular image posts
 
         const booru = new Danbooru()
-        booru.posts({ tags: 'genshin_impact rating:explicit ' }, { limit: 30 }).then(posts => { //Limit  does nothing?
+        booru.posts({ tags: 'genshin_impact rating:explicit ', limit: 30 }).then(posts => { //Limit  does nothing?
             // Select a random post from posts array
             const index = Math.floor(Math.random() * posts.length)
             console.log(posts.length)
