@@ -22,19 +22,16 @@ bot.ws.on("INTERACTION_CREATE", async(interaction) => {
 
                     // Perform a search for popular image posts
                     const booru = new Danbooru()
-                    booru.posts({ tags: 'genshin_impact rating:explicit ', limit: 30 }).then(posts => {
+                    booru.posts({ order: 'rank', limit: 50 }).then(posts => {
                         // Select a random post from posts array
                         const index = Math.floor(Math.random() * posts.length)
                         console.log(posts.length)
-
                         console.log(index)
 
                         const post = posts[index]
 
-
                         // Get post's url
                         const url = booru.url(post.file_url)
-
                         const name = post.id
 
                         interact({

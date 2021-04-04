@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\bin"
   ],
-  "SelectedNode": "\\discord_bot.env",
+  "SelectedNode": "\\package.json",
   "PreviewInSolutionExplorer": false
 }
