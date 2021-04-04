@@ -2,7 +2,6 @@ require('dotenv').config();
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const TOKEN = process.env.TOKEN /*change 'Your Discord Token Here to the token of your bot*/ //Reminder to change this to env var
-const apiEndpoint = 'https://discord.com/api/v8/applications/827591767590305833/guilds/716516840146468925/commands'
 const Danbooru = require('danbooru')
 const login = ''
 const key = ''
