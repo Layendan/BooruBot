@@ -50,17 +50,14 @@ bot.ws.on("INTERACTION_CREATE", async(interaction) => {
 
                     });
                 } else {
+
+                    console.log(interaction)
                     // Perform a search for popular image posts
                     const booru = new Danbooru()
 
-
                     const post = await booru.posts(interaction.data.options.find(
                             (option) => option.name == "id"
-                        ) &&
-                        interaction.data.options.find(
-                            (option) => option.name == "id"
                         ).value);
-
 
                     // Get post's url
                     const url = booru.url(post.file_url)
